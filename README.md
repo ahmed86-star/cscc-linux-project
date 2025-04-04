@@ -7,6 +7,7 @@
 [![AWS](https://img.shields.io/badge/AWS-%23FF9900.svg?logo=amazon-aws&logoColor=white)](https://aws.amazon.com)
 [![WordPress](https://img.shields.io/badge/WordPress-%2321759B.svg?logo=wordpress&logoColor=white)](https://wordpress.org)
 [![MariaDB](https://img.shields.io/badge/MariaDB-003545?logo=mariadb&logoColor=white)](https://mariadb.org)
+[![MySQL Compatible](https://img.shields.io/badge/MySQL-5.7%20Compatible-4479A1?logo=mysql&logoColor=white)](https://mariadb.com/kb/en/mariadb-vs-mysql-compatibility/)
 
 ## 📋 Table of Contents
 - [Architecture](#-architecture-overview)
@@ -71,36 +72,242 @@ Type: t3a.nano
 SG: CSCI2790DBSG
 ```
 
-## 🔐 Security Configuration
-```bash
-# MariaDB Secure Installation
-$ sudo mysql_secure_installation
+# 🚀 AWS WordPress Deployment - Week 2+  
+**Three-Tier Architecture: Web + DB + Test Server**  
 
-# WordPress DB Setup
-CREATE DATABASE wordpress;
-CREATE USER 'wpuser'@'web-server-ip' IDENTIFIED BY 'StrongPass123!';
-GRANT ALL ON wordpress.* TO 'wpuser'@'web-server-ip';
+## 📋 Project Overview  
+- **Web Server**: Apache + PHP + WordPress  
+- **DB Server**: MariaDB 10.5  
+- **Test Server**: Security validation host  
+- **Infra**: Amazon Linux 2023 (t3a.nano)  
+
+## 🔒 Security Groups  
+| Group Name         | Inbound Rules                          | Purpose                  |
+|--------------------|----------------------------------------|--------------------------|
+| `CSCI2790WebSG`    | SSH 22 (0.0.0.0/0), HTTP 80 (0.0.0.0/0)| Web server access        |
+| `CSCI2790DBSG`     | SSH 22 (WebSG), MySQL 3306 (WebSG)     | DB server access         |
+| `CSCI2790TestSG`   | SSH 22 (Your-IPv4/32)                  | Security validation      |
+
+## 🛠️ Week 2 Setup  
+
+### 1️⃣ Launch All EC2 Instances  
+
+###  Test Server ###
+
+![Test group](https://github.com/user-attachments/assets/fe180d37-0b97-4cf7-b873-6e68508cebb3)
+
+
+
+```bash
+# Test Server (Add this to your setup)
+AMI: Amazon Linux 2023  
+Type: t3a.nano  
+SG: CSCI2790TestSG  
+Hostname: testserver  
+IP: Auto-assign public IPv4  `
 ```
 
-## 🔍 Network Validation
-```bash
-# From Validation Host (should fail)
-$ telnet db-server-ip 3306
-Connection timed out
+### testGroup ###
 
-# From Web Server (should succeed)
-$ mysql -h db-server-ip -u wpuser -p
-MariaDB [(none)]> STATUS
+![testserver](https://github.com/user-attachments/assets/e47411d9-7882-4bd0-ba4a-5cb7b3862b34)
+
+
+
+
+# From testserver (should FAIL):
+telnet db 3306
+nc -zv db 3306
+
+# From webserver (should SUCCEED):
+mysql -h db -u wpadmin -p
+
+
+🚨 Troubleshooting Matrix
+Issue	Test Command	Solution
+Can't reach DB	telnet db 3306	Check SGs & route tables
+SSH connection refused	nc -zv testserver 22	Verify IPv4 in TestSG
+Hostname not resolving	ping web vs ping <IP>	Check /etc/hosts
+
+
+
+# 🗃️ MariaDB Database Server Configuration
+
+## 🌟 Server Specs
+- **Hostname**: db
+- **AMI**: Amazon Linux 2023
+- **Instance Type**: t3a.nano
+- **Security Group**: CSCI2790DBSG
+- **Ports**: 3306 (MySQL), 22 (SSH)
+
+## 📌 Installation
+
+### Install MariaDB 10.5 ###
+![maridb install](https://github.com/user-attachments/assets/1fee7eb5-2680-473f-8109-402477c7b5b2)
+
+
+```bash
+# Install MariaDB 10.5
+sudo amazon-linux-extras install -y mariadb10.5
+
+# Start & enable service
+sudo systemctl enable --now mariadb
+```
+### Verify installation ###
+mysql --version
+# Should return: mysql Ver 15.1 Distrib 10.5.x-MariaDB
+![mysql](https://github.com/user-attachments/assets/f92bd30e-5d1a-4bdf-ba4f-47d4f396ef91)
+
+🔐 Secure Configuration
+
+
+```bash
+
+sudo mysql_secure_installation
+ ```
+
+Follow prompts to:
+
+Set root password (use DB$Root2024! format)
+
+Remove anonymous users
+
+Disable remote root login
+
+Remove test database
+
+Reload privileges
+
+
+### 🛠️ WordPress Database Setup ###
+![wordprees db](https://github.com/user-attachments/assets/66cc7459-376f-4e0a-831b-e2644515911b)
+
+```CREATE DATABASE wordpress;
+CREATE USER 'wpadmin'@'web' IDENTIFIED BY 'W0rdPr3$$DB2024!';
+GRANT ALL PRIVILEGES ON wordpress.* TO 'wpadmin'@'web';
+FLUSH PRIVILEGES;
+```
+
+
+### 🌐 Remote Access Configuration ###
+
+```sudo vi /etc/my.cnf.d/mariadb-server.cnf```
+
+```[mysqld]
+bind-address = 0.0.0.0
+```
+
+
+### 🚦 Service Management  ###
+
+# Start/Enable service
+```sudo systemctl enable --now mariadb```
+
+# Check status
+```sudo systemctl status mariadb```
+
+# View error logs
+```sudo tail -f /var/log/mysqld.log```
+
+
+
+### 🔍 Connection Testing ###
+
+From web server:
+
+```mysql -h db -u wpadmin -p```
+
+
+
+### 🚨 Troubleshooting ###
+Issue	Command	Solution
+Connection refused	```telnet db 3306```	Check SGs & bind-address
+Access denied	```mysql -u root -p```	Verify user privileges
+Can't start	```journalctl -xe```	Check disk space
+
+
+
+
+---
+
+### `web-server/README.md` - PHP/Web Server Setup
+
+```
+# 🌐 Web Server Setup (Apache/PHP)
+
+## 📦 Package Installation
+```bash
+# Install LAMP stack
+sudo dnf install -y httpd php php-mysqlnd php-gd php-mbstring
+
+# Verify PHP
+php -v
+# Should return PHP 8.x
 ```
 
 
 
+### 🚀 Apache Configuration ###
+
+# Start services
+```sudo systemctl enable --now httpd```
+
+# Open firewall
+```sudo firewall-cmd --permanent --add-service={http,https}```
+```sudo firewall-cmd --reload```
+
+# Set proper permissions
+```sudo chown -R apache:apache /var/www/html```
+
+
+### 🏗️ WordPress SetuP ###
+
+# Download and extract
+```cd``` /tmp
+```wget ```https://wordpress.org/latest.tar.gz
+```tar -xzf ```latest.tar.gz
+```sudo mv``` wordpress /var/www/html/
+
+# Set config
+```sudo cp /var/www/html/wordpress/wp-config-sample.php /var/www/html/wordpress/wp-config.php```
+```sudo vi /var/www/html/wordpress/wp-config.php```
 
 
 
+### Edit these values: ###
+
+```define('DB_NAME', 'wordpress');
+define('DB_USER', 'wpadmin');
+define('DB_PASSWORD', 'W0rdPr3$$DB2024!');
+define('DB_HOST', 'db');
+```
+
+### 🛡️ Security Hardening ###
+
+# Restrict directory access
+```sudo chmod 750 /var/www/html/wordpress```
+
+# Disable directory listing
+```sudo echo "Options -Indexes" >> /etc/httpd/conf/httpd.conf```
 
 
 
+### 🧪 Testing ###
+
+
+# Test PHP processing
+```echo "<?php phpinfo(); ?>" | sudo tee /var/www/html/test.php
+# Access http://<server-ip>/test.php
+```
+
+# Test DB connection
+```php -r "new mysqli('db', 'wpadmin', 'W0rdPr3$$DB2024!', 'wordpress');"```
+
+
+###🚨 Troubleshooting ###
+Symptom	Check	Fix
+403 Forbidden	```ls -ld /var/www/html```	Correct permissions
+White screen	```tail -f /var/log/httpd/error_log```	Check PHP errors
+DB connection failed	```telnet db 3306```	Verify credentials
 
 
 
