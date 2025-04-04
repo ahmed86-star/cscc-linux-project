@@ -73,9 +73,7 @@ graph LR
 ```
 
 
-
-
-### week 1 ###
+###  Week 1  ###
 
 ## 🛠️ AWS Setup Guide
 
@@ -226,7 +224,7 @@ Remove test database
 
 Reload privileges
 
-
+  ### WEEK 3 ###
 ### 🛠️ WordPress Database Setup ###
 ![wordprees db](https://github.com/user-attachments/assets/66cc7459-376f-4e0a-831b-e2644515911b)
 
@@ -357,7 +355,6 @@ Symptom	Check	Fix
 403 Forbidden	```ls -ld /var/www/html```	Correct permissions
 White screen	```tail -f /var/log/httpd/error_log```	Check PHP errors
 DB connection failed	```telnet db 3306```	Verify credentials
-
 
 
 
