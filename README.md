@@ -60,6 +60,21 @@ graph TD
     classDef db fill:#e8f5e9,stroke:#43a047
     class B web; class C db
 ```
+```mermaid
+graph LR
+    A[User] -->|HTTPS:443| B[Web Tier]
+    B -->|MySQL:3306| C[DB Tier]
+    C -->|Reject All| D[Internet]
+    B -->|SSH:22| E[Test/Jump Box]
+    style A fill:#2ecc71,stroke:#333
+    style B fill:#3498db,stroke:#333
+    style C fill:#e74c3c,stroke:#333
+    style E fill:#f39c12,stroke:#333
+```
+
+
+
+
 ### week 1 ###
 
 ## 🛠️ AWS Setup Guide
@@ -342,10 +357,6 @@ Symptom	Check	Fix
 403 Forbidden	```ls -ld /var/www/html```	Correct permissions
 White screen	```tail -f /var/log/httpd/error_log```	Check PHP errors
 DB connection failed	```telnet db 3306```	Verify credentials
-
-
-
-
 
 
 
