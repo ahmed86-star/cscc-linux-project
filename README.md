@@ -1,8 +1,42 @@
 
+# 🌐 Linux Web Services Project
 
-# 🚀  Linux+ Project: Secure WordPress on AWS
- - Linux Administration**  
-*Tiered AWS deployment with MariaDB backend and security validation*
+## 🎯 Purpose
+**Hands-on experience with secure, remote web services on Linux**  
+This project teaches you to:
+- Deploy a production-like web service
+- Configure secure database connectivity
+- Implement proper access controls
+- Troubleshoot multi-server architectures
+
+## 📌 Core Requirements
+```diff
++ Must Complete:
+1. Two AWS Linux instances (Web + DB)
+2. WordPress via Apache/PHP
+3. MariaDB with remote access
+4. Proper security groups
+5. Static IP configuration
+
+! Bonus Opportunities:
+- Add HTTPS encryption
+- Implement automated backups
+- Create monitoring alerts
+```
+### 🧠 Learning Outcomes ###
+Area	Skills Gained
+Infrastructure	AWS EC2, Security Groups, Networking
+Security	Principle of Least Privilege, Firewalls
+Web Stack	LAMP (Linux, Apache, MySQL, PHP)
+Troubleshooting	Log analysis, Connectivity testing
+⏱️ Project Timeline
+Week 1-2: Environment setup
+
+Week 3-4: Service configuration
+
+Week 5: Security hardening
+
+Week 6: Final testing & documentation
 
 [![AWS](https://img.shields.io/badge/AWS-%23FF9900.svg?logo=amazon-aws&logoColor=white)](https://aws.amazon.com)
 [![WordPress](https://img.shields.io/badge/WordPress-%2321759B.svg?logo=wordpress&logoColor=white)](https://wordpress.org)
