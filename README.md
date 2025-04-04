@@ -492,7 +492,19 @@ DB connection failed	```telnet db 3306```	Verify credentials
 1. Clone repo:
    ```bash
    git clone https://github.com/yourusername/cscc-linux-project.git
+   cd cscc-linux-project
+
    ```
+### 2. One-Click Setup (AWS) ###
+ # Deploy infrastructure
+```./deploy.sh --web-sg CSCI2790WebSG --db-sg CSCI2790DBSG```
+
+# Expected output #
+ ```✅ Web Server: http://<YOUR_IP>/wordpress```
+
+```🔐 SSH Access: ssh -i keys/webadmin.pem adminuser@<WEB_IP>```
+
+   
 2. Follow [Setup Guide](#-aws-setup-guide)
 3. Verify with [Validation Tests](#-network-validation)
 
