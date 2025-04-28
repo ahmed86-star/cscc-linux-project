@@ -96,6 +96,18 @@ graph LR
 
 ![DB host](https://github.com/user-attachments/assets/767a2083-70e8-4e0f-9416-8a13865a3535)
 
+
+![mariadb](https://github.com/user-attachments/assets/1ac1c5c8-c61c-4da5-bef6-7648237fa93c)
+
+
+
+
+![Secure Database User Permissions](https://github.com/user-attachments/assets/b6263437-8c1c-45b4-a4a6-78ad793ec203)
+
+
+
+
+
 ```
 # Database (CSCI2790DBSG)
 - SSH (22): 0.0.0.0/0
