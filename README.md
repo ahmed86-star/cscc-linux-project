@@ -370,6 +370,12 @@ DB connection failed	```telnet db 3306```	Verify credentials
 
 
 
+Now it’s time for the fun part—go play with your new site. Configure the design, add pages and posts, and start getting users to your site.
+
+
+
+![image](https://github.com/user-attachments/assets/54ccde88-ec24-40cc-a98d-8c2f128bdc9f)
+
 
 
 
